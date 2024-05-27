@@ -1,9 +1,6 @@
 import 'package:crud_firebase/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 
-// Import the firebase_core plugin
-import 'package:firebase_core/firebase_core.dart';
-
 class Home extends StatefulWidget {
   const Home({
     super.key,
@@ -34,7 +31,15 @@ class _HomeState extends State<Home> {
             return ListView.builder(
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
-                  return Text(snapshot.data?[index]['nombre']);
+                  return ListTile(
+                      title: Text(snapshot.data?[index]['nombre']),
+                      onTap: (() async {
+                        await Navigator.pushNamed(context, '/upd', arguments: {
+                          'uid': snapshot.data?[index]['uid'],
+                          'name': snapshot.data?[index]['nombre']
+                        });
+                        setState(() {});
+                      }));
                 });
           } else {
             return const Center(
@@ -43,6 +48,13 @@ class _HomeState extends State<Home> {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.pushNamed(context, '/add');
+          setState(() {});
+        },
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
