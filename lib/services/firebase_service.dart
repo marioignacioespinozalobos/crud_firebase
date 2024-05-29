@@ -5,7 +5,8 @@ FirebaseFirestore db = FirebaseFirestore.instance;
 Future<List> getUsuarios() async {
   List usuarios = [];
 
-  CollectionReference collectionReferenceUsuarios = db.collection('usuario');
+  Query collectionReferenceUsuarios =
+      db.collection('usuario').orderBy('nombre');
 
   QuerySnapshot queryUsuarios = await collectionReferenceUsuarios.get();
 
@@ -29,4 +30,8 @@ Future<void> insertarUsuario(String nombre) async {
 
 Future<void> actualizarUsuario(String uid, String nombreNuevo) async {
   await db.collection('usuario').doc(uid).set({'nombre': nombreNuevo});
+}
+
+Future<void> eliminarUsuario(String uid) async {
+  await db.collection('usuario').doc(uid).delete();
 }
